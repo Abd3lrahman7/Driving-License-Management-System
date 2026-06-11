@@ -64,10 +64,10 @@ namespace DVLD_DataAccess
                 }
                 catch (Exception ex)
                 {
-                    //Console.WriteLine("Error: " + ex.Message);
-                    isFound = false;
-                }
-                finally
+                clsDataAccessSettings.LogException(ex);
+                throw;
+            }
+            finally
                 {
                     connection.Close();
                 }
@@ -109,9 +109,10 @@ namespace DVLD_DataAccess
 
                 catch (Exception ex)
                 {
-                    // Console.WriteLine("Error: " + ex.Message);
-                }
-                finally
+                clsDataAccessSettings.LogException(ex);
+                throw;
+            }
+            finally
                 {
                     connection.Close();
                 }
@@ -155,7 +156,8 @@ namespace DVLD_DataAccess
 
             catch (Exception ex)
             {
-                // Console.WriteLine("Error: " + ex.Message);
+                clsDataAccessSettings.LogException(ex);
+                throw;
             }
             finally
             {
@@ -226,7 +228,8 @@ namespace DVLD_DataAccess
 
             catch (Exception ex)
             {
-                //Console.WriteLine("Error: " + ex.Message);
+                clsDataAccessSettings.LogException(ex);
+                throw;
 
             }
 
@@ -280,8 +283,8 @@ namespace DVLD_DataAccess
             }
             catch (Exception ex)
             {
-                //Console.WriteLine("Error: " + ex.Message);
-                return false;
+                clsDataAccessSettings.LogException(ex);
+                throw;
             }
 
             finally
@@ -322,7 +325,8 @@ namespace DVLD_DataAccess
 
             catch (Exception ex)
             {
-                //Console.WriteLine("Error: " + ex.Message);
+                clsDataAccessSettings.LogException(ex);
+                throw;
 
             }
 

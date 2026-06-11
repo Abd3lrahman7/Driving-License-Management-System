@@ -14,60 +14,64 @@ namespace DVLD_DataAccess
     public class clsApplicationTypeData
     {
 
-        public static bool GetApplicationTypeInfoByID(int ApplicationTypeID, 
+        public static bool GetApplicationTypeInfoByID(int ApplicationTypeID,
             ref string ApplicationTypeTitle, ref float ApplicationFees)
+        {
+            bool isFound = false;
+
+            SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
+
+            string query = "SELECT * FROM ApplicationTypes WHERE ApplicationTypeID = @ApplicationTypeID";
+
+            SqlCommand command = new SqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@ApplicationTypeID", ApplicationTypeID);
+
+            try
             {
-                bool isFound = false;
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
 
-                SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
-
-                string query = "SELECT * FROM ApplicationTypes WHERE ApplicationTypeID = @ApplicationTypeID";
-
-                SqlCommand command = new SqlCommand(query, connection);
-
-                command.Parameters.AddWithValue("@ApplicationTypeID", ApplicationTypeID);
-
-                try
+                if (reader.Read())
                 {
-                    connection.Open();
-                    SqlDataReader reader = command.ExecuteReader();
 
-                    if (reader.Read())
-                    {
+                    // The record was found
+                    isFound = true;
 
-                        // The record was found
-                        isFound = true;
+                    ApplicationTypeTitle = (string)reader["ApplicationTypeTitle"];
+                    ApplicationFees = Convert.ToSingle(reader["ApplicationFees"]);
 
-                        ApplicationTypeTitle = (string)reader["ApplicationTypeTitle"];
-                        ApplicationFees = Convert.ToSingle( reader["ApplicationFees"]);
 
-                  
 
 
 
                 }
-                    else
-                    {
-                        // The record was not found
-                        isFound = false;
-                    }
-
-                    reader.Close();
-
-
-                }
-                catch (Exception ex)
+                else
                 {
-                    //Console.WriteLine("Error: " + ex.Message);
+                    // The record was not found
                     isFound = false;
                 }
-                finally
-                {
-                    connection.Close();
-                }
 
-                return isFound;
+                reader.Close();
+
+
             }
+            catch (Exception ex)
+            {
+                //Console.WriteLine("Error: " + ex.Message);
+                isFound = false;
+                clsDataAccessSettings.LogException(ex);
+                throw;
+
+
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return isFound;
+        }
 
         public static DataTable GetAllApplicationTypes()
             {
@@ -98,7 +102,8 @@ namespace DVLD_DataAccess
 
                 catch (Exception ex)
                 {
-                    // Console.WriteLine("Error: " + ex.Message);
+                   clsDataAccessSettings.LogException(ex);
+                   throw;
                 }
                 finally
                 {
@@ -140,6 +145,8 @@ namespace DVLD_DataAccess
             catch (Exception ex)
             {
                 //Console.WriteLine("Error: " + ex.Message);
+                clsDataAccessSettings.LogException(ex);
+                throw;
 
             }
 
@@ -179,7 +186,10 @@ namespace DVLD_DataAccess
             catch (Exception ex)
             {
                 //Console.WriteLine("Error: " + ex.Message);
+                
+                clsDataAccessSettings.LogException(ex);
                 return false;
+
             }
 
             finally

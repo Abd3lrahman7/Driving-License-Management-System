@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -81,6 +82,26 @@ namespace DVLD.Classes
 
             sourceFile= destinationFile;
             return true;
+        }
+
+        public static void LogException(Exception ex)
+        {
+            string SourceName = "DVLD System";
+
+            try
+            {
+                if (!EventLog.SourceExists(SourceName))
+                {
+                    EventLog.CreateEventSource(SourceName, "Application");
+                }
+            }
+            catch (Exception ex2)
+            {
+                Debug.WriteLine ($"Logger init failed : {ex2.ToString()}");
+            }
+            
+            
+            EventLog.WriteEntry(SourceName, ex.ToString(), EventLogEntryType.Error);
         }
     }
 }
