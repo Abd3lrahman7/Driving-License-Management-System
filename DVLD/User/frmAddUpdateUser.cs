@@ -110,7 +110,7 @@ namespace DVLD.User
             if (!this.ValidateChildren())
             {
                 //Here we dont continue becuase the form is not valid
-                MessageBox.Show("Some fileds are not valide!, put the mouse over the red icon(s) to see the erro", 
+                MessageBox.Show("Some fileds are not valid!, put the mouse over the red icon(s) to see the error", 
                     "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
 
@@ -118,7 +118,7 @@ namespace DVLD.User
 
             _User.PersonID = ctrlPersonCardWithFilter1.PersonID;
             _User.UserName = txtUserName.Text.Trim();
-            _User.Password = txtPassword.Text.Trim();
+            _User.Password = clsUtil.HashPassword(txtPassword.Text.Trim());
             _User.IsActive = chkIsActive.Checked;
 
 

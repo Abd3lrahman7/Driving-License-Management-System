@@ -251,7 +251,6 @@ namespace DVLD.People
             else
             {
                 _Person.ImagePath = "";
-                MessageBox.Show("null");
             }
 
 

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -102,6 +103,16 @@ namespace DVLD.Classes
             
             
             EventLog.WriteEntry(SourceName, ex.ToString(), EventLogEntryType.Error);
+        }
+
+        public static string HashPassword(string Password)
+        {
+            using (SHA256  sha256 = SHA256.Create())
+            {
+                byte[] HashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(Password));
+
+                return BitConverter.ToString(HashBytes).Replace("-","").ToLower();
+            }
         }
     }
 }
